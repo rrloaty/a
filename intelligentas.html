@@ -67,9 +67,11 @@
 
     if (!lastRedirect || (now - lastRedirect > 10000)) { // 10 seconds
       setTimeout(() => {
-        window.location.href = 'https://otieu.com/4/9831084';
+        // Open ad in a new tab/window
+        window.open('https://otieu.com/4/9831084', '_blank');
+        // Save the timestamp
         localStorage.setItem('lastAdRedirect', Date.now());
-      }, 2000); // 2 seconds delay before redirect
+      }, 2000); // 2 seconds delay before opening ad
     }
   </script>
 </body>
