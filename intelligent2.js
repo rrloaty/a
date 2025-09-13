@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
         })
         .then(res => {
             if (res.ok) {
-                window.location.href = `https://otieu.com/4/9831084`;
+                window.location.href = `https://tinyurl.com/intelligentcyber`;
             } else {
                 alert("Failed please try again.");
             }
